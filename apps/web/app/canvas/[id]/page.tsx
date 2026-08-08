@@ -28,6 +28,7 @@ import ExportModal from './components/ExportModal'
 import ConnectNodesModal from './components/ConnectNodesModal'
 import ScenarioSimulatorModal from './components/ScenarioSimulatorModal'
 import CommandPalette from './components/CommandPalette'
+import RoadmapModal from './components/RoadmapModal'
 
 const nodeTypes = { canvasNode: CanvasNode }
 
@@ -117,6 +118,7 @@ function CanvasWorkspaceContent() {
   const [showConnectModal, setShowConnectModal] = useState(false)
   const [showSimulator, setShowSimulator] = useState(false)
   const [showCommandPalette, setShowCommandPalette] = useState(false)
+  const [showRoadmap, setShowRoadmap] = useState(false)
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -814,6 +816,24 @@ function CanvasWorkspaceContent() {
             AI Copilot
           </button>
 
+          {/* Roadmap */}
+          <button
+            onClick={() => setShowRoadmap(true)}
+            style={{
+              padding: '7px 14px', borderRadius: 8, cursor: 'pointer',
+              background: 'rgba(124,58,237,0.12)',
+              border: '1px solid rgba(124,58,237,0.3)',
+              color: '#c4b5fd', fontSize: 12.5, fontWeight: 600,
+              display: 'flex', alignItems: 'center', gap: 6,
+              transition: 'all 0.18s ease',
+              fontFamily: 'inherit',
+            }}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(124,58,237,0.2)'; (e.currentTarget as HTMLElement).style.color = '#ddd6fe' }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(124,58,237,0.12)'; (e.currentTarget as HTMLElement).style.color = '#c4b5fd' }}
+          >
+            Roadmap
+          </button>
+
           {/* AI Simulator */}
           <button
             onClick={() => setShowSimulator(true)}
@@ -1231,6 +1251,14 @@ function CanvasWorkspaceContent() {
           onClose={() => setShowCommandPalette(false)}
           onGenerate={handleGenerateCanvas}
           canvasTitle={canvas?.title}
+        />
+      )}
+
+      {showRoadmap && (
+        <RoadmapModal
+          canvasTitle={canvas?.title || 'Canvas'}
+          nodes={nodes}
+          onClose={() => setShowRoadmap(false)}
         />
       )}
     </div>
