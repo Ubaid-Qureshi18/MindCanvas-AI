@@ -7,11 +7,11 @@ interface AIPanelProps {
 }
 
 const CATEGORIZED_PROMPTS = [
-  { label: '🚀 SaaS', prompt: 'Build a B2B SaaS startup for remote team collaboration & automated workflow tracking' },
-  { label: '🤖 AI App', prompt: 'Launch an AI-powered legal document auditor with instant risk highlighting' },
-  { label: '🛒 E-Commerce', prompt: 'Create a hyper-personalized DTC food & nutrition subscription platform' },
-  { label: '💼 FinTech', prompt: 'Design an automated accounting & tax optimization platform for freelancers' },
-  { label: '🏥 Health', prompt: 'Build a telemedicine platform connecting patients to specialized medical experts' },
+  { label: 'SaaS Platform', prompt: 'Build a B2B SaaS startup for remote team collaboration & automated workflow tracking' },
+  { label: 'AI Document Auditor', prompt: 'Launch an AI-powered legal document auditor with instant risk highlighting' },
+  { label: 'DTC E-Commerce', prompt: 'Create a hyper-personalized DTC food & nutrition subscription platform' },
+  { label: 'FinTech Optimization', prompt: 'Design an automated accounting & tax optimization platform for freelancers' },
+  { label: 'Digital Health', prompt: 'Build a telemedicine platform connecting patients to specialized medical experts' },
 ]
 
 export default function AIPanel({ onGenerate, generating }: AIPanelProps) {
@@ -40,14 +40,14 @@ export default function AIPanel({ onGenerate, generating }: AIPanelProps) {
       {showSuggestions && (
         <div style={{
           position: 'absolute', bottom: '100%', left: 0, right: 0, marginBottom: 10,
-          background: 'rgba(11,11,24,0.98)', border: '1px solid rgba(99,102,241,0.3)',
+          background: 'rgba(12,12,28,0.98)', border: '1px solid rgba(99,102,241,0.25)',
           borderRadius: 16, overflow: 'hidden', backdropFilter: 'blur(24px)',
-          boxShadow: '0 16px 40px rgba(0,0,0,0.7), 0 0 30px rgba(99,102,241,0.15)',
+          boxShadow: '0 16px 40px rgba(0,0,0,0.7)',
           padding: 12, display: 'flex', flexDirection: 'column', gap: 6,
           animation: 'fadeIn 0.15s ease',
         }}>
-          <div style={{ fontSize: 10.5, fontWeight: 700, color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.08em', padding: '2px 8px 6px' }}>
-            ⚡ Quick Start Templates
+          <div style={{ fontSize: 10.5, fontWeight: 700, color: 'rgba(255,255,255,0.38)', textTransform: 'uppercase', letterSpacing: '0.08em', padding: '2px 8px 6px' }}>
+            Quick Start Templates
           </div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
             {CATEGORIZED_PROMPTS.map((item) => (
@@ -60,18 +60,19 @@ export default function AIPanel({ onGenerate, generating }: AIPanelProps) {
                 }}
                 style={{
                   padding: '6px 12px', borderRadius: 8,
-                  background: 'rgba(99,102,241,0.1)',
+                  background: 'rgba(99,102,241,0.09)',
                   border: '1px solid rgba(99,102,241,0.22)',
                   color: 'rgba(255,255,255,0.85)', fontSize: 11.5, fontWeight: 600,
                   cursor: 'pointer', transition: 'all 0.15s',
                   display: 'flex', alignItems: 'center', gap: 6,
+                  fontFamily: 'inherit',
                 }}
                 onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLElement).style.background = 'rgba(99,102,241,0.22)'
+                  (e.currentTarget as HTMLElement).style.background = 'rgba(99,102,241,0.2)'
                   ;(e.currentTarget as HTMLElement).style.borderColor = 'rgba(99,102,241,0.45)'
                 }}
                 onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLElement).style.background = 'rgba(99,102,241,0.1)'
+                  (e.currentTarget as HTMLElement).style.background = 'rgba(99,102,241,0.09)'
                   ;(e.currentTarget as HTMLElement).style.borderColor = 'rgba(99,102,241,0.22)'
                 }}
               >
@@ -83,14 +84,14 @@ export default function AIPanel({ onGenerate, generating }: AIPanelProps) {
       )}
 
       <div style={{ position: 'relative' }}>
-        <span style={{ position: 'absolute', left: 16, top: '50%', transform: 'translateY(-50%)', fontSize: 18, zIndex: 1 }}>
-          {generating ? <span className="spinner" style={{ width: 18, height: 18 }} /> : '✦'}
+        <span style={{ position: 'absolute', left: 16, top: '50%', transform: 'translateY(-50%)', fontSize: 15, zIndex: 1, color: '#818cf8' }}>
+          {generating ? <span className="spinner" style={{ width: 16, height: 16 }} /> : '✦'}
         </span>
         <input
           ref={inputRef}
           type="text"
           className="ai-prompt-input"
-          style={{ paddingLeft: 48, paddingRight: prompt.trim().length > 3 ? 210 : 135 }}
+          style={{ paddingLeft: 46, paddingRight: prompt.trim().length > 3 ? 230 : 140 }}
           placeholder={generating ? 'Building strategic canvas...' : 'Describe an idea (e.g., AI legal auditor)...'}
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
@@ -108,14 +109,15 @@ export default function AIPanel({ onGenerate, generating }: AIPanelProps) {
               onClick={handleEnhancePrompt}
               title="Enhance prompt with AI details"
               style={{
-                padding: '6px 11px', borderRadius: 8,
-                background: 'rgba(167,139,250,0.14)',
-                border: '1px solid rgba(167,139,250,0.3)',
-                color: '#c4b5fd', fontSize: 11.5, fontWeight: 700,
+                padding: '6px 12px', borderRadius: 8,
+                background: 'rgba(167,139,250,0.12)',
+                border: '1px solid rgba(167,139,250,0.28)',
+                color: '#c4b5fd', fontSize: 11.5, fontWeight: 600,
                 cursor: 'pointer', transition: 'all 0.15s',
+                fontFamily: 'inherit',
               }}
             >
-              ✨ Enhance
+              Enhance
             </button>
           )}
           <button
@@ -131,4 +133,3 @@ export default function AIPanel({ onGenerate, generating }: AIPanelProps) {
     </div>
   )
 }
-

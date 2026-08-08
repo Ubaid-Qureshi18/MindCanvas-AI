@@ -525,10 +525,25 @@ code, pre { font-family: 'JetBrains Mono', 'Fira Code', monospace; }
 .canvas-node:hover { border-color: var(--color-border-medium); box-shadow: var(--shadow-md); }
 .canvas-node.selected { border-color: rgba(99,102,241,0.55) !important; box-shadow: 0 0 0 2px rgba(99,102,241,0.2), var(--shadow-lg); }
 
-/* ── Mobile ─────────────────────────────────────────────────────────────── */
-@media (max-width: 768px) {
-  header { padding: 0 12px !important; gap: 8px !important; }
-  .ai-panel { width: calc(100vw - 16px) !important; bottom: 12px !important; }
-  .animate-slide-right { width: 100vw !important; max-width: 100vw !important; }
-  .modal-container { max-width: 95vw !important; margin: 10px !important; }
+/* ── Mobile & Responsive Breakpoints ───────────────────────────────────── */
+@media (max-width: 1024px) {
+  .ai-panel { width: calc(100vw - 32px) !important; }
 }
+
+@media (max-width: 768px) {
+  header { padding: 0 12px !important; gap: 8px !important; height: 54px !important; }
+  .ai-panel { width: calc(100vw - 16px) !important; bottom: 12px !important; }
+  .ai-prompt-input { padding: 12px 14px !important; font-size: 13px !important; }
+  .animate-slide-right { width: 100vw !important; max-width: 100vw !important; }
+  .modal-container { max-width: 96vw !important; margin: 8px !important; padding: 20px 16px !important; }
+  .cmd-palette { width: 96vw !important; }
+  .canvas-node { min-width: 280px !important; }
+  nav { padding: 0 16px !important; }
+  h1 { font-size: clamp(32px, 8vw, 56px) !important; }
+}
+
+@media (max-width: 480px) {
+  .btn-primary, .btn-secondary { padding: 8px 14px !important; font-size: 13px !important; }
+  .ai-panel { bottom: 8px !important; }
+}
+

@@ -201,12 +201,12 @@ function DashboardContent() {
       }}>
         <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none' }}>
           <div style={{
-            width: 34, height: 34, borderRadius: 10,
-            background: 'linear-gradient(135deg,#6366f1,#8b5cf6)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18,
-            boxShadow: '0 0 16px rgba(99,102,241,0.3)',
-          }}>🧠</div>
-          <span style={{ fontWeight: 800, fontSize: 17, color: 'white', letterSpacing: '-0.01em' }}>MindCanvas</span>
+            width: 32, height: 32, borderRadius: 9,
+            background: 'linear-gradient(135deg,#6366f1,#7c3aed)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, color: 'white',
+            boxShadow: '0 0 16px rgba(99,102,241,0.35)',
+          }}>✦</div>
+          <span style={{ fontWeight: 800, fontSize: 17, color: 'white', letterSpacing: '-0.03em' }}>MindCanvas</span>
         </Link>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
@@ -288,7 +288,7 @@ function DashboardContent() {
             borderRadius: 10, fontSize: 13, color: '#fca5a5',
             display: 'flex', alignItems: 'center', gap: 8,
           }}>
-            ⚠️ {error}
+            <span style={{ fontSize: 14, fontWeight: 700 }}>!</span> {error}
           </div>
         )}
 
@@ -299,7 +299,7 @@ function DashboardContent() {
           boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
-            <span style={{ fontSize: 16 }}>⚡</span>
+            <span style={{ fontSize: 12, color: '#818cf8', fontWeight: 800 }}>✦</span>
             <span style={{ fontSize: 11, color: '#a78bfa', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.08em' }}>
               Quick Templates
             </span>
@@ -350,7 +350,7 @@ function DashboardContent() {
               borderRadius: 24, maxWidth: 600, margin: '40px auto',
             }}
           >
-            <div className="brain-float-3d" style={{ fontSize: 64, marginBottom: 20 }}>🧠</div>
+            <div style={{ width: 56, height: 56, borderRadius: 16, background: 'rgba(99,102,241,0.12)', border: '1px solid rgba(99,102,241,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24, color: '#818cf8', margin: '0 auto 20px' }}>✦</div>
             <h2 style={{ fontSize: 26, fontWeight: 900, marginBottom: 12, color: 'white', letterSpacing: '-0.02em' }}>
               No Canvases in Workspace
             </h2>
@@ -361,13 +361,13 @@ function DashboardContent() {
               onClick={() => setShowNewModal(true)}
               style={{
                 padding: '13px 32px', borderRadius: 12, border: 'none', cursor: 'pointer',
-                background: 'linear-gradient(135deg, #6366f1, #8b5cf6, #ec4899)',
-                color: 'white', fontSize: 14, fontWeight: 800,
+                background: 'linear-gradient(135deg, #6366f1, #7c3aed)',
+                color: 'white', fontSize: 14, fontWeight: 700,
                 boxShadow: '0 4px 24px rgba(99,102,241,0.4)',
-                fontFamily: 'inherit',
+                fontFamily: 'inherit', letterSpacing: '-0.01em',
               }}
             >
-              ✨ Build Your First Canvas
+              Create Your First Canvas
             </button>
           </div>
         ) : (
@@ -397,10 +397,9 @@ function DashboardContent() {
                           width: 40, height: 40, borderRadius: 12,
                           background: `${color}18`, border: `1.5px solid ${color}35`,
                           display: 'flex', alignItems: 'center', justifyContent: 'center',
-                          fontSize: 20, flexShrink: 0,
-                          boxShadow: `0 4px 16px ${color}20`,
+                          fontSize: 15, fontWeight: 800, color: color, flexShrink: 0,
                         }}>
-                          🧩
+                          ✦
                         </div>
                         <span style={{
                           fontSize: 10.5, fontWeight: 800, color: color,
@@ -478,12 +477,12 @@ function DashboardContent() {
           >
             <div style={{ marginBottom: 28 }}>
               <div style={{
-                width: 48, height: 48, borderRadius: 14,
-                background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+                width: 44, height: 44, borderRadius: 12,
+                background: 'linear-gradient(135deg, #6366f1, #7c3aed)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: 22, marginBottom: 16,
-                boxShadow: '0 0 24px rgba(99,102,241,0.3)',
-              }}>🧠</div>
+                fontSize: 18, color: 'white', marginBottom: 16,
+                boxShadow: '0 0 20px rgba(99,102,241,0.35)',
+              }}>✦</div>
               <h2 style={{ fontSize: 22, fontWeight: 800, marginBottom: 6, color: 'white', letterSpacing: '-0.01em' }}>
                 Create New Canvas
               </h2>
@@ -583,7 +582,7 @@ function DashboardContent() {
                     boxShadow: creating ? 'none' : '0 4px 16px rgba(99,102,241,0.3)',
                   }}
                 >
-                  {creating ? <><span className="spinner" style={{ width: 14, height: 14 }} /> Creating...</> : '✨ Create Canvas'}
+                  {creating ? <><span className="spinner" style={{ width: 14, height: 14 }} /> Creating...</> : 'Create Canvas'}
                 </button>
               </div>
             </div>

@@ -27,40 +27,39 @@ export default function CanvasAuditWidget({ nodes, onAutoFillMissing }: CanvasAu
   })
 
   const missingPillars = REQUIRED_PILLARS.filter((p) => !existingTypes.has(p.type))
-
-  const scoreColor = score >= 80 ? '#10b981' : score >= 50 ? '#f59e0b' : '#ef4444'
+  const scoreColor = score >= 80 ? '#059669' : score >= 50 ? '#d97706' : '#dc2626'
+  const scoreBadgeBg = score >= 80 ? 'rgba(5,150,105,0.12)' : score >= 50 ? 'rgba(217,119,6,0.12)' : 'rgba(220,38,38,0.12)'
 
   return (
     <div style={{ position: 'relative' }}>
       <button
         onClick={() => setOpen(!open)}
         style={{
-          padding: '6px 14px', borderRadius: 8, cursor: 'pointer',
-          background: 'linear-gradient(135deg, rgba(16,185,129,0.15), rgba(6,182,212,0.15))',
-          border: `1px solid ${scoreColor}60`,
-          display: 'flex', alignItems: 'center', gap: 7,
-          boxShadow: `0 0 16px ${scoreColor}25`,
-          transition: 'all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+          padding: '7px 14px', borderRadius: 8, cursor: 'pointer',
+          background: scoreBadgeBg,
+          border: `1px solid ${scoreColor}35`,
+          display: 'flex', alignItems: 'center', gap: 8,
+          transition: 'all 0.18s ease',
+          fontFamily: 'inherit',
         }}
         onMouseEnter={(e) => {
-          (e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)'
-          ;(e.currentTarget as HTMLElement).style.boxShadow = `0 0 24px ${scoreColor}40`
+          (e.currentTarget as HTMLElement).style.background = `${scoreColor}22`
+          ;(e.currentTarget as HTMLElement).style.borderColor = `${scoreColor}60`
         }}
         onMouseLeave={(e) => {
-          (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'
-          ;(e.currentTarget as HTMLElement).style.boxShadow = `0 0 16px ${scoreColor}25`
+          (e.currentTarget as HTMLElement).style.background = scoreBadgeBg
+          ;(e.currentTarget as HTMLElement).style.borderColor = `${scoreColor}35`
         }}
       >
         <div style={{
-          width: 20, height: 20, borderRadius: '50%',
-          background: `${scoreColor}25`, border: `2px solid ${scoreColor}`,
+          width: 18, height: 18, borderRadius: '50%',
+          background: `${scoreColor}20`, border: `1.5px solid ${scoreColor}`,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          fontSize: 9.5, fontWeight: 900, color: scoreColor,
-          boxShadow: `0 0 10px ${scoreColor}`,
+          fontSize: 9, fontWeight: 800, color: scoreColor,
         }}>
           {score}%
         </div>
-        <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.9)', fontWeight: 700 }}>
+        <span style={{ fontSize: 12.5, color: 'rgba(255,255,255,0.85)', fontWeight: 600 }}>
           Health Audit
         </span>
       </button>
@@ -72,20 +71,22 @@ export default function CanvasAuditWidget({ nodes, onAutoFillMissing }: CanvasAu
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="glow-border-3d card-3d"
             style={{
-              position: 'absolute', top: 56, right: 20, width: 340,
-              borderRadius: 20, padding: 22,
-              boxShadow: '0 24px 60px rgba(0,0,0,0.85), 0 0 35px rgba(99,102,241,0.25)',
+              position: 'absolute', top: 54, right: 20, width: 320,
+              borderRadius: 16, padding: 20,
+              background: 'rgba(12,12,28,0.98)',
+              border: '1px solid rgba(255,255,255,0.12)',
+              boxShadow: '0 20px 50px rgba(0,0,0,0.85)',
+              backdropFilter: 'blur(24px)',
             }}
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-              <div style={{ fontSize: 13, fontWeight: 800, color: 'white' }}>Canvas Readiness Scorecard</div>
-              <span style={{ fontSize: 13, fontWeight: 900, color: scoreColor }}>{score}%</span>
+              <div style={{ fontSize: 13, fontWeight: 700, color: 'white' }}>Canvas Readiness Scorecard</div>
+              <span style={{ fontSize: 13, fontWeight: 800, color: scoreColor }}>{score}%</span>
             </div>
 
             {/* Progress Bar */}
-            <div style={{ height: 6, background: 'rgba(255,255,255,0.08)', borderRadius: 3, overflow: 'hidden', marginBottom: 14 }}>
+            <div style={{ height: 5, background: 'rgba(255,255,255,0.08)', borderRadius: 3, overflow: 'hidden', marginBottom: 14 }}>
               <div style={{
                 height: '100%', width: `${score}%`,
                 background: scoreColor, borderRadius: 3, transition: 'width 0.4s ease',
@@ -97,18 +98,18 @@ export default function CanvasAuditWidget({ nodes, onAutoFillMissing }: CanvasAu
               {REQUIRED_PILLARS.map((p) => {
                 const has = existingTypes.has(p.type)
                 return (
-                  <div key={p.type} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 11.5 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: has ? 'rgba(255,255,255,0.85)' : 'rgba(255,255,255,0.4)' }}>
-                      <span style={{ color: has ? '#10b981' : '#ef4444', fontWeight: 800 }}>{has ? '✓' : '✕'}</span>
+                  <div key={p.type} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 12 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 7, color: has ? 'rgba(255,255,255,0.85)' : 'rgba(255,255,255,0.4)' }}>
+                      <span style={{ color: has ? '#059669' : '#dc2626', fontWeight: 800 }}>{has ? '✓' : '✕'}</span>
                       <span>{p.label}</span>
                     </div>
                     {!has && (
                       <button
                         onClick={() => { onAutoFillMissing(p.type); setOpen(false) }}
                         style={{
-                          padding: '2px 7px', borderRadius: 4,
-                          background: 'rgba(99,102,241,0.15)', border: '1px solid rgba(99,102,241,0.3)',
-                          color: '#818cf8', fontSize: 10, fontWeight: 700, cursor: 'pointer',
+                          padding: '3px 8px', borderRadius: 5,
+                          background: 'rgba(99,102,241,0.12)', border: '1px solid rgba(99,102,241,0.28)',
+                          color: '#818cf8', fontSize: 10.5, fontWeight: 600, cursor: 'pointer',
                         }}
                       >
                         + Add
@@ -123,12 +124,13 @@ export default function CanvasAuditWidget({ nodes, onAutoFillMissing }: CanvasAu
               <button
                 onClick={() => { onAutoFillMissing(missingPillars[0].type); setOpen(false) }}
                 style={{
-                  width: '100%', padding: '8px', borderRadius: 8, border: 'none',
-                  background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
-                  color: 'white', fontSize: 11.5, fontWeight: 700, cursor: 'pointer',
+                  width: '100%', padding: '9px', borderRadius: 8, border: 'none',
+                  background: 'linear-gradient(135deg, #6366f1, #7c3aed)',
+                  color: 'white', fontSize: 12, fontWeight: 700, cursor: 'pointer',
+                  letterSpacing: '-0.01em',
                 }}
               >
-                ✨ Auto-Complete Missing Component
+                Auto-complete missing component
               </button>
             )}
           </div>
