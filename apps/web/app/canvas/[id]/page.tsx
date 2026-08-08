@@ -955,31 +955,30 @@ function CanvasWorkspaceContent() {
             }}>
               <button
                 onClick={autoArrangeLayout}
-                title="Auto arrange nodes"
+                title="Auto arrange nodes into a clean grid layout"
                 style={{
-                  padding: '6px 12px', background: 'rgba(255,255,255,0.04)',
-                  border: '1px solid rgba(255,255,255,0.08)', borderRadius: 7,
-                  color: 'rgba(255,255,255,0.7)', fontSize: 11, cursor: 'pointer',
-                  display: 'flex', alignItems: 'center', gap: 5, fontWeight: 500,
-                  transition: 'all 0.15s',
+                  padding: '6px 12px', background: 'rgba(255,255,255,0.05)',
+                  border: '1px solid rgba(255,255,255,0.1)', borderRadius: 7,
+                  color: 'rgba(255,255,255,0.75)', fontSize: 11.5, cursor: 'pointer',
+                  display: 'flex', alignItems: 'center', gap: 5, fontWeight: 600,
+                  transition: 'all 0.15s ease', fontFamily: 'inherit',
                 }}
               >
-                ⊞ Auto Arrange
+                Auto Arrange
               </button>
 
-              {/* Feature 5: Visual Node Connector */}
               <button
                 onClick={() => setShowConnectModal(true)}
                 title="Create custom connection between nodes"
                 style={{
                   padding: '6px 12px', background: 'rgba(99,102,241,0.12)',
-                  border: '1px solid rgba(99,102,241,0.25)', borderRadius: 7,
-                  color: '#a78bfa', fontSize: 11, cursor: 'pointer',
+                  border: '1px solid rgba(99,102,241,0.28)', borderRadius: 7,
+                  color: '#a78bfa', fontSize: 11.5, cursor: 'pointer',
                   display: 'flex', alignItems: 'center', gap: 5, fontWeight: 600,
-                  transition: 'all 0.15s',
+                  transition: 'all 0.15s ease', fontFamily: 'inherit',
                 }}
               >
-                🔗 Link Nodes
+                Link Nodes
               </button>
             </div>
           </Panel>
@@ -1012,7 +1011,7 @@ function CanvasWorkspaceContent() {
                   maxWidth: 520, borderRadius: 24, marginTop: 40,
                 }}
               >
-                <div className="brain-float-3d" style={{ fontSize: 64, marginBottom: 14 }}>🧠</div>
+                <div style={{ width: 56, height: 56, borderRadius: 16, background: 'rgba(99,102,241,0.12)', border: '1px solid rgba(99,102,241,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24, color: '#818cf8', margin: '0 auto 16px' }}>✦</div>
                 <h2 style={{ fontSize: 24, fontWeight: 900, color: 'white', marginBottom: 8, letterSpacing: '-0.02em' }}>
                   Your Strategic Canvas is Ready
                 </h2>
