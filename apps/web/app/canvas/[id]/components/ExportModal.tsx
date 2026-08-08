@@ -19,8 +19,8 @@ export default function ExportModal({ canvasTitle, nodes, edges, onClose }: Expo
     md += `---\n\n`
 
     nodes.forEach((n, idx) => {
-      const meta = n.data?.meta || { icon: '📌', label: 'Node' }
-      md += `### ${idx + 1}. ${meta.icon} ${n.data?.title || 'Untitled'}\n`
+      const meta = n.data?.meta || { icon: '✦', label: 'Node' }
+      md += `### ${idx + 1}. ${n.data?.title || 'Untitled'}\n`
       md += `**Category:** ${meta.label}\n\n`
       md += `${cleanText(n.data?.content || '')}\n\n`
       md += `---\n\n`
@@ -54,11 +54,11 @@ export default function ExportModal({ canvasTitle, nodes, edges, onClose }: Expo
   const generateHTML = () => {
     let bodyHtml = ''
     nodes.forEach((n, idx) => {
-      const meta = n.data?.meta || { icon: '📌', label: 'Node' }
+      const meta = n.data?.meta || { icon: '✦', label: 'Node' }
       bodyHtml += `
         <div style="background:#111126; border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:20px; margin-bottom:16px;">
           <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
-            <span style="font-size:20px;">${meta.icon}</span>
+            <span style="font-size:16px; color:#818cf8;">✦</span>
             <span style="font-weight:bold; font-size:16px; color:#ffffff;">${idx + 1}. ${n.data?.title || 'Untitled'}</span>
             <span style="background:rgba(99,102,241,0.2); color:#a78bfa; font-size:11px; padding:2px 8px; border-radius:12px; margin-left:auto;">${meta.label}</span>
           </div>
@@ -106,30 +106,31 @@ export default function ExportModal({ canvasTitle, nodes, edges, onClose }: Expo
     <div
       onClick={onClose}
       style={{
-        position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.8)',
+        position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)',
         zIndex: 300, display: 'flex', alignItems: 'center', justifyContent: 'center',
-        padding: 24, backdropFilter: 'blur(10px)',
+        padding: 24, backdropFilter: 'blur(16px)',
       }}
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="glow-border-3d card-3d"
         style={{
-          width: '100%', maxWidth: 560, borderRadius: 24,
-          padding: 36,
-          boxShadow: '0 30px 80px rgba(0,0,0,0.85), 0 0 50px rgba(99,102,241,0.25)',
+          width: '100%', maxWidth: 560, borderRadius: 20,
+          padding: 32, background: 'rgba(12,12,28,0.99)',
+          border: '1px solid rgba(255,255,255,0.11)',
+          boxShadow: '0 30px 80px rgba(0,0,0,0.9)',
+          fontFamily: "'Inter', system-ui, sans-serif",
         }}
       >
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
           <div>
-            <h2 style={{ fontSize: 22, fontWeight: 900, color: 'white', margin: 0, letterSpacing: '-0.02em' }}>⚡ Export Visual Canvas</h2>
+            <h2 style={{ fontSize: 20, fontWeight: 800, color: 'white', margin: 0, letterSpacing: '-0.02em' }}>Export Canvas Report</h2>
             <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)', margin: '4px 0 0' }}>Download or share {canvasTitle}</p>
           </div>
           <button
             onClick={onClose}
             style={{
               background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.6)',
-              fontSize: 16, cursor: 'pointer', width: 32, height: 32, borderRadius: 8,
+              fontSize: 15, cursor: 'pointer', width: 30, height: 30, borderRadius: 8,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}
           >
@@ -145,78 +146,68 @@ export default function ExportModal({ canvasTitle, nodes, edges, onClose }: Expo
             display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           }}>
             <div>
-              <div style={{ fontSize: 14, fontWeight: 700, color: 'white' }}>📄 Executive Markdown (.md)</div>
+              <div style={{ fontSize: 14, fontWeight: 700, color: 'white' }}>Executive Markdown (.md)</div>
               <div style={{ fontSize: 11.5, color: 'rgba(255,255,255,0.4)', marginTop: 2 }}>Formatted document with sections and notes</div>
             </div>
             <button
-              onClick={() => downloadFile(generateMarkdown(), `${canvasTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-')}.md`, 'text/markdown')}
-              style={{
-                padding: '7px 14px', borderRadius: 8, border: 'none',
-                background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
-                color: 'white', fontSize: 12, fontWeight: 700, cursor: 'pointer',
-              }}
+              onClick={() => downloadFile(generateMarkdown(), `${canvasTitle.toLowerCase().replace(/\s+/g, '-')}-report.md`, 'text/markdown')}
+              style={{ padding: '7px 14px', borderRadius: 8, background: 'rgba(99,102,241,0.15)', border: '1px solid rgba(99,102,241,0.3)', color: '#a5b4fc', fontSize: 12, fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit' }}
             >
               Download
             </button>
           </div>
 
-          {/* HTML Briefing */}
+          {/* HTML */}
           <div style={{
             padding: 16, borderRadius: 12,
             background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)',
             display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           }}>
             <div>
-              <div style={{ fontSize: 14, fontWeight: 700, color: 'white' }}>🌐 Printable HTML Report (.html)</div>
-              <div style={{ fontSize: 11.5, color: 'rgba(255,255,255,0.4)', marginTop: 2 }}>Printable web report ready for PDF conversion</div>
+              <div style={{ fontSize: 14, fontWeight: 700, color: 'white' }}>HTML Briefing (.html)</div>
+              <div style={{ fontSize: 11.5, color: 'rgba(255,255,255,0.4)', marginTop: 2 }}>Self-contained web report for executive distribution</div>
             </div>
             <button
-              onClick={() => downloadFile(generateHTML(), `${canvasTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-report.html`, 'text/html')}
-              style={{
-                padding: '7px 14px', borderRadius: 8, border: 'none',
-                background: 'linear-gradient(135deg, #10b981, #06b6d4)',
-                color: 'white', fontSize: 12, fontWeight: 700, cursor: 'pointer',
-              }}
+              onClick={() => downloadFile(generateHTML(), `${canvasTitle.toLowerCase().replace(/\s+/g, '-')}-briefing.html`, 'text/html')}
+              style={{ padding: '7px 14px', borderRadius: 8, background: 'rgba(5,150,105,0.15)', border: '1px solid rgba(5,150,105,0.3)', color: '#6ee7b7', fontSize: 12, fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit' }}
             >
               Download
             </button>
           </div>
 
-          {/* JSON Backup */}
+          {/* JSON */}
           <div style={{
             padding: 16, borderRadius: 12,
             background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)',
             display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           }}>
             <div>
-              <div style={{ fontSize: 14, fontWeight: 700, color: 'white' }}>💾 Raw JSON Backup (.json)</div>
-              <div style={{ fontSize: 11.5, color: 'rgba(255,255,255,0.4)', marginTop: 2 }}>Full node coordinates and connection graph</div>
+              <div style={{ fontSize: 14, fontWeight: 700, color: 'white' }}>JSON Raw Schema (.json)</div>
+              <div style={{ fontSize: 11.5, color: 'rgba(255,255,255,0.4)', marginTop: 2 }}>Complete node graph data payload</div>
             </div>
             <button
-              onClick={() => downloadFile(generateJSON(), `${canvasTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-backup.json`, 'application/json')}
-              style={{
-                padding: '7px 14px', borderRadius: 8,
-                background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)',
-                color: 'white', fontSize: 12, fontWeight: 600, cursor: 'pointer',
-              }}
+              onClick={() => downloadFile(generateJSON(), `${canvasTitle.toLowerCase().replace(/\s+/g, '-')}-data.json`, 'application/json')}
+              style={{ padding: '7px 14px', borderRadius: 8, background: 'rgba(217,119,6,0.15)', border: '1px solid rgba(217,119,6,0.3)', color: '#fde68a', fontSize: 12, fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit' }}
             >
               Download
             </button>
           </div>
         </div>
 
-        <button
-          onClick={copyToClipboard}
-          style={{
-            width: '100%', padding: '12px', borderRadius: 10,
-            background: copied ? 'rgba(16,185,129,0.2)' : 'rgba(255,255,255,0.05)',
-            border: copied ? '1px solid #10b981' : '1px solid rgba(255,255,255,0.1)',
-            color: copied ? '#6ee7b7' : 'rgba(255,255,255,0.8)',
-            fontSize: 13, fontWeight: 700, cursor: 'pointer', transition: 'all 0.2s',
-          }}
-        >
-          {copied ? '✓ Copied Markdown to Clipboard!' : '📋 Copy Summary to Clipboard'}
-        </button>
+        <div style={{ display: 'flex', gap: 10 }}>
+          <button
+            onClick={copyToClipboard}
+            style={{ flex: 1, padding: '11px', borderRadius: 10, background: copied ? 'rgba(5,150,105,0.2)' : 'rgba(255,255,255,0.06)', border: `1px solid ${copied ? 'rgba(5,150,105,0.4)' : 'rgba(255,255,255,0.1)'}`, color: copied ? '#34d399' : 'white', fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit' }}
+          >
+            {copied ? '✓ Copied Markdown' : 'Copy Markdown to Clipboard'}
+          </button>
+          <button
+            onClick={onClose}
+            style={{ padding: '11px 20px', borderRadius: 10, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.5)', fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit' }}
+          >
+            Close
+          </button>
+        </div>
       </div>
     </div>
   )
