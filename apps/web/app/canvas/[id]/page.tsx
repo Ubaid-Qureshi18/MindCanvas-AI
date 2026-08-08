@@ -772,23 +772,6 @@ function CanvasWorkspaceContent() {
           )}
         </div>
 
-        {/* Command Palette Trigger */}
-        <button
-          onClick={() => setShowCommandPalette(true)}
-          style={{
-            padding: '5px 10px', borderRadius: 8,
-            background: 'rgba(255,255,255,0.04)',
-            border: '1px solid rgba(255,255,255,0.09)',
-            color: 'rgba(255,255,255,0.5)', fontSize: 11.5, fontWeight: 600,
-            cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6,
-            transition: 'all 0.15s ease', fontFamily: 'inherit', flexShrink: 0,
-          }}
-          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.08)'; (e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.8)' }}
-          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.04)'; (e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.5)' }}
-        >
-          <span style={{ color: '#818cf8', fontWeight: 800 }}>⌘K</span> Commands
-        </button>
-
         {/* Right: actions & features */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
           {/* AI status badge */}
