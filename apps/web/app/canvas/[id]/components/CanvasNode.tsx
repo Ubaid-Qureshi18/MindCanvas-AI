@@ -40,8 +40,8 @@ const CanvasNode = memo(({ data, selected }: NodeProps) => {
     : ''
 
   const displayContent = cleanMarkdown(rawContent)
-  const previewText = displayContent.slice(0, 150)
-  const hasMore = displayContent.length > 150
+  const previewText = displayContent.slice(0, 180)
+  const hasMore = displayContent.length > 180
 
   const doAction = (action: string, e: React.MouseEvent) => {
     e.stopPropagation()
@@ -52,7 +52,6 @@ const CanvasNode = memo(({ data, selected }: NodeProps) => {
   const isActive = selected || hovered
   const c = meta.color
 
-  // Derive a softer background tint from the accent color
   const bgBase = selected
     ? 'rgba(16, 16, 34, 0.98)'
     : hovered
@@ -76,7 +75,7 @@ const CanvasNode = memo(({ data, selected }: NodeProps) => {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       style={{
-        width: 340,
+        width: 360,
         borderRadius: 14,
         background: bgBase,
         border: `1px solid ${borderColor}`,
@@ -94,7 +93,7 @@ const CanvasNode = memo(({ data, selected }: NodeProps) => {
         userSelect: 'none',
       }}
     >
-      {/* Connection handles — appear on hover/select */}
+      {/* Handles */}
       {[
         { type: 'target' as const, pos: Position.Left,   style: { left: -5 } },
         { type: 'source' as const, pos: Position.Right,  style: { right: -5 } },
@@ -141,7 +140,7 @@ const CanvasNode = memo(({ data, selected }: NodeProps) => {
           background: `${c}18`,
           border: `1px solid ${c}35`,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          fontSize: 18, flexShrink: 0,
+          fontSize: 16, color: c, fontWeight: 800, flexShrink: 0,
         }}>
           {meta.icon}
         </div>
@@ -179,7 +178,7 @@ const CanvasNode = memo(({ data, selected }: NodeProps) => {
           </div>
 
           <div style={{
-            fontSize: 13.5,
+            fontSize: 14,
             fontWeight: 700,
             color: 'rgba(255,255,255,0.92)',
             lineHeight: 1.3,
@@ -202,8 +201,9 @@ const CanvasNode = memo(({ data, selected }: NodeProps) => {
             border: '1px solid rgba(255,255,255,0.1)',
             borderRadius: 6,
             cursor: 'pointer',
-            fontSize: 11,
-            color: 'rgba(255,255,255,0.45)',
+            fontSize: 12,
+            fontWeight: 700,
+            color: 'rgba(255,255,255,0.5)',
             flexShrink: 0,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             transition: 'all 0.15s ease',
@@ -212,12 +212,12 @@ const CanvasNode = memo(({ data, selected }: NodeProps) => {
           onMouseEnter={(e) => {
             const el = e.currentTarget as HTMLElement
             el.style.background = 'rgba(255,255,255,0.1)'
-            el.style.color = 'rgba(255,255,255,0.8)'
+            el.style.color = 'rgba(255,255,255,0.85)'
           }}
           onMouseLeave={(e) => {
             const el = e.currentTarget as HTMLElement
             el.style.background = 'rgba(255,255,255,0.05)'
-            el.style.color = 'rgba(255,255,255,0.45)'
+            el.style.color = 'rgba(255,255,255,0.5)'
           }}
         >
           {expanded ? '−' : '+'}
@@ -227,7 +227,7 @@ const CanvasNode = memo(({ data, selected }: NodeProps) => {
       {/* Content body */}
       <div style={{
         padding: '12px 16px',
-        maxHeight: expanded ? 260 : 78,
+        maxHeight: expanded ? 320 : 92,
         overflow: 'hidden',
         transition: 'max-height 0.32s cubic-bezier(0.4, 0, 0.2, 1)',
         position: 'relative',
@@ -236,16 +236,16 @@ const CanvasNode = memo(({ data, selected }: NodeProps) => {
           <>
             <p style={{
               margin: 0,
-              fontSize: 12.5,
-              lineHeight: 1.72,
-              color: 'rgba(255,255,255,0.72)',
+              fontSize: 13,
+              lineHeight: 1.65,
+              color: 'rgba(255,255,255,0.82)',
               fontWeight: 400,
               whiteSpace: 'pre-wrap',
               wordBreak: 'break-word',
             }}>
               {expanded ? displayContent : previewText}
               {!expanded && hasMore && (
-                <span style={{ color: 'rgba(255,255,255,0.25)' }}>…</span>
+                <span style={{ color: 'rgba(255,255,255,0.3)' }}>…</span>
               )}
             </p>
             {!expanded && hasMore && (
@@ -259,8 +259,8 @@ const CanvasNode = memo(({ data, selected }: NodeProps) => {
         ) : (
           <p style={{
             margin: 0,
-            fontSize: 12,
-            color: 'rgba(255,255,255,0.22)',
+            fontSize: 12.5,
+            color: 'rgba(255,255,255,0.25)',
             fontStyle: 'italic',
             lineHeight: 1.5,
           }}>
@@ -275,7 +275,7 @@ const CanvasNode = memo(({ data, selected }: NodeProps) => {
         borderTop: '1px solid rgba(255,255,255,0.05)',
         background: 'rgba(0,0,0,0.25)',
         display: 'flex',
-        gap: 5,
+        gap: 6,
         alignItems: 'center',
       }}>
         {([
@@ -291,13 +291,13 @@ const CanvasNode = memo(({ data, selected }: NodeProps) => {
             title={label}
             style={{
               flex: 1,
-              fontSize: 10.5,
+              fontSize: 11,
               fontWeight: 600,
-              padding: '5px 4px',
+              padding: '6px 5px',
               borderRadius: 6,
-              background: `${color}12`,
+              background: `${color}14`,
               border: `1px solid ${color}28`,
-              color: `${color}cc`,
+              color: `${color}dd`,
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
@@ -308,16 +308,16 @@ const CanvasNode = memo(({ data, selected }: NodeProps) => {
             }}
             onMouseEnter={(e) => {
               const el = e.currentTarget as HTMLElement
-              el.style.background = `${color}22`
+              el.style.background = `${color}25`
               el.style.borderColor = `${color}55`
               el.style.color = color
               el.style.transform = 'translateY(-1px)'
             }}
             onMouseLeave={(e) => {
               const el = e.currentTarget as HTMLElement
-              el.style.background = `${color}12`
+              el.style.background = `${color}14`
               el.style.borderColor = `${color}28`
-              el.style.color = `${color}cc`
+              el.style.color = `${color}dd`
               el.style.transform = 'translateY(0)'
             }}
           >
@@ -332,7 +332,7 @@ const CanvasNode = memo(({ data, selected }: NodeProps) => {
           style={{
             width: 26, height: 26,
             flexShrink: 0,
-            fontSize: 12,
+            fontSize: 13,
             borderRadius: 6,
             background: 'rgba(220,38,38,0.08)',
             border: '1px solid rgba(220,38,38,0.2)',

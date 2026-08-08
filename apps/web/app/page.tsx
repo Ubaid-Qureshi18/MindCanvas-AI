@@ -182,7 +182,7 @@ export default function LandingPage() {
           <span style={{ fontWeight: 800, fontSize: 17, letterSpacing: '-0.04em', color: 'white' }}>MindCanvas</span>
         </Link>
         <div style={{ display: 'flex', gap: 4, alignItems: 'center' }}>
-          {['Features', 'Pricing', 'Docs'].map(item => (
+          {['Features', 'Pricing'].map(item => (
             <a key={item} href={`#${item.toLowerCase()}`} className="nav-link" style={{ padding: '6px 13px', borderRadius: 7, color: 'rgba(255,255,255,0.48)', fontSize: 13.5, fontWeight: 500, textDecoration: 'none' }}>{item}</a>
           ))}
           <div style={{ width: 1, height: 20, background: 'rgba(255,255,255,0.1)', margin: '0 6px' }} />
