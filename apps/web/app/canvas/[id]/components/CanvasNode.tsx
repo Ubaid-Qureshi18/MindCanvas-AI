@@ -12,7 +12,6 @@ interface NodeData {
   hasResearch?: boolean
 }
 
-// Strip markdown symbols so content reads cleanly
 function cleanMarkdown(raw: string): string {
   return raw
     .replace(/#{1,6}\s+/g, '')
@@ -22,8 +21,8 @@ function cleanMarkdown(raw: string): string {
     .replace(/^>\s*/gm, '')
     .replace(/^[-*+]\s+/gm, '• ')
     .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
-    .replace(/\|[^\n]+\|/g, '')       // remove table rows
-    .replace(/^[-|=]{3,}/gm, '')      // remove table dividers
+    .replace(/\|[^\n]+\|/g, '')
+    .replace(/^[-|=]{3,}/gm, '')
     .replace(/\n{3,}/g, '\n\n')
     .trim()
 }
@@ -41,8 +40,8 @@ const CanvasNode = memo(({ data, selected }: NodeProps) => {
     : ''
 
   const displayContent = cleanMarkdown(rawContent)
-  const previewText = displayContent.slice(0, 140)
-  const hasMore = displayContent.length > 140
+  const previewText = displayContent.slice(0, 150)
+  const hasMore = displayContent.length > 150
 
   const doAction = (action: string, e: React.MouseEvent) => {
     e.stopPropagation()
@@ -53,42 +52,49 @@ const CanvasNode = memo(({ data, selected }: NodeProps) => {
   const isActive = selected || hovered
   const c = meta.color
 
+  // Derive a softer background tint from the accent color
+  const bgBase = selected
+    ? 'rgba(16, 16, 34, 0.98)'
+    : hovered
+    ? 'rgba(14, 14, 30, 0.97)'
+    : 'rgba(11, 11, 25, 0.95)'
+
+  const borderColor = selected
+    ? `${c}bb`
+    : hovered
+    ? `${c}66`
+    : 'rgba(255,255,255,0.09)'
+
+  const shadow = selected
+    ? `0 0 0 2.5px ${c}28, 0 20px 52px rgba(0,0,0,0.8), 0 0 32px ${c}22`
+    : hovered
+    ? `0 16px 44px rgba(0,0,0,0.7), 0 0 18px ${c}14`
+    : '0 8px 28px rgba(0,0,0,0.55)'
+
   return (
     <div
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       style={{
-        width: 350,
-        borderRadius: 22,
-        background: selected
-          ? `linear-gradient(145deg, rgba(20,20,44,0.98) 0%, rgba(12,12,28,0.96) 100%)`
-          : hovered
-          ? `linear-gradient(145deg, rgba(18,18,38,0.96) 0%, rgba(10,10,24,0.95) 100%)`
-          : `linear-gradient(145deg, rgba(14,14,30,0.94) 0%, rgba(8,8,18,0.93) 100%)`,
-        border: selected
-          ? `2px solid ${c}`
-          : hovered
-          ? `1.5px solid ${c}aa`
-          : `1px solid rgba(255,255,255,0.12)`,
-        boxShadow: selected
-          ? `0 0 0 3px ${c}35, 0 28px 70px rgba(0,0,0,0.85), 0 0 40px ${c}45`
-          : hovered
-          ? `0 20px 52px rgba(0,0,0,0.75), 0 0 30px ${c}30`
-          : `0 10px 36px rgba(0,0,0,0.6)`,
+        width: 340,
+        borderRadius: 14,
+        background: bgBase,
+        border: `1px solid ${borderColor}`,
+        boxShadow: shadow,
         transform: selected
-          ? 'scale(1.035) translateY(-5px)'
+          ? 'scale(1.025) translateY(-3px)'
           : hovered
-          ? 'scale(1.02) translateY(-4px)'
+          ? 'scale(1.01) translateY(-2px)'
           : 'scale(1)',
-        transition: 'all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+        transition: 'all 0.22s cubic-bezier(0.4, 0, 0.2, 1)',
         position: 'relative',
         overflow: 'hidden',
-        fontFamily: "'Inter', system-ui, -apple-system, sans-serif",
-        backdropFilter: 'blur(36px) saturate(220%)',
+        fontFamily: "'Inter', system-ui, sans-serif",
+        backdropFilter: 'blur(28px) saturate(180%)',
         userSelect: 'none',
       }}
     >
-      {/* Handles */}
+      {/* Connection handles — appear on hover/select */}
       {[
         { type: 'target' as const, pos: Position.Left,   style: { left: -5 } },
         { type: 'source' as const, pos: Position.Right,  style: { right: -5 } },
@@ -101,87 +107,83 @@ const CanvasNode = memo(({ data, selected }: NodeProps) => {
           position={pos}
           style={{
             background: c,
-            width: 10, height: 10,
-            border: `2px solid #06060e`,
+            width: 9, height: 9,
+            border: `2px solid #07070f`,
             borderRadius: '50%',
             opacity: isActive ? 1 : 0,
             transition: 'opacity 0.18s, transform 0.18s',
             transform: isActive ? 'scale(1.2)' : 'scale(1)',
-            boxShadow: `0 0 10px ${c}`,
             ...style,
           }}
         />
       ))}
 
-      {/* Top glowing color bar */}
+      {/* Accent top bar */}
       <div style={{
-        height: 5,
-        background: `linear-gradient(90deg, ${c} 0%, ${c}88 60%, transparent 100%)`,
-        boxShadow: `0 0 12px ${c}aa`,
+        height: 3,
+        background: `linear-gradient(90deg, ${c} 0%, ${c}50 60%, transparent 100%)`,
+        opacity: isActive ? 1 : 0.7,
+        transition: 'opacity 0.2s',
       }} />
 
-      {/* Card Header */}
+      {/* Header */}
       <div style={{
         padding: '14px 16px 12px',
-        background: `linear-gradient(160deg, ${c}20 0%, transparent 70%)`,
-        borderBottom: `1px solid rgba(255,255,255,0.07)`,
+        borderBottom: '1px solid rgba(255,255,255,0.06)',
         display: 'flex',
         alignItems: 'center',
-        gap: 12,
+        gap: 11,
       }}>
-        {/* Glowing Icon Avatar */}
+        {/* Node icon */}
         <div style={{
-          width: 42, height: 42,
-          borderRadius: 14,
-          background: `linear-gradient(135deg, ${c}30 0%, ${c}10 100%)`,
-          border: `1.5px solid ${c}50`,
+          width: 38, height: 38,
+          borderRadius: 11,
+          background: `${c}18`,
+          border: `1px solid ${c}35`,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          fontSize: 20, flexShrink: 0,
-          boxShadow: `0 4px 16px ${c}35`,
+          fontSize: 18, flexShrink: 0,
         }}>
           {meta.icon}
         </div>
 
-        {/* Type + Title */}
+        {/* Label + title */}
         <div style={{ flex: 1, minWidth: 0 }}>
-          {/* Category Pill */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
             <span style={{
-              fontSize: 9.5, fontWeight: 900,
+              fontSize: 9, fontWeight: 700,
               color: c,
               textTransform: 'uppercase',
               letterSpacing: '0.1em',
-              background: `linear-gradient(90deg, ${c}25 0%, ${c}12 100%)`,
-              padding: '3px 10px',
-              borderRadius: 20,
-              border: `1px solid ${c}45`,
+              background: `${c}18`,
+              padding: '2px 8px',
+              borderRadius: 4,
+              border: `1px solid ${c}30`,
               whiteSpace: 'nowrap',
-              boxShadow: `0 2px 8px ${c}20`,
             }}>
               {meta.label}
             </span>
             {hasResearch && (
               <span style={{
-                fontSize: 9, padding: '2px 8px',
-                borderRadius: 20,
-                background: 'rgba(6,182,212,0.18)',
+                fontSize: 9, padding: '2px 7px',
+                borderRadius: 4,
+                background: 'rgba(8,145,178,0.14)',
                 color: '#22d3ee',
-                border: '1px solid rgba(6,182,212,0.35)',
-                fontWeight: 800,
-                boxShadow: '0 0 10px rgba(6,182,212,0.3)',
+                border: '1px solid rgba(8,145,178,0.3)',
+                fontWeight: 700,
+                letterSpacing: '0.05em',
+                textTransform: 'uppercase',
               }}>
-                🔬 Deep Research
+                Research
               </span>
             )}
           </div>
 
-          {/* Title */}
           <div style={{
-            fontSize: 15,
-            fontWeight: 800,
-            color: '#ffffff',
-            lineHeight: 1.25,
-            letterSpacing: '-0.015em',
+            fontSize: 13.5,
+            fontWeight: 700,
+            color: 'rgba(255,255,255,0.92)',
+            lineHeight: 1.3,
+            letterSpacing: '-0.02em',
             overflow: 'hidden',
             textOverflow: 'ellipsis',
             whiteSpace: 'nowrap',
@@ -190,41 +192,44 @@ const CanvasNode = memo(({ data, selected }: NodeProps) => {
           </div>
         </div>
 
-        {/* Expand button */}
+        {/* Expand toggle */}
         <button
           onMouseDown={(e) => e.stopPropagation()}
           onClick={(e) => { e.stopPropagation(); setExpanded(!expanded) }}
           style={{
-            width: 26, height: 26,
-            background: 'rgba(255,255,255,0.06)',
-            border: '1px solid rgba(255,255,255,0.12)',
-            borderRadius: 8,
+            width: 24, height: 24,
+            background: 'rgba(255,255,255,0.05)',
+            border: '1px solid rgba(255,255,255,0.1)',
+            borderRadius: 6,
             cursor: 'pointer',
-            fontSize: 10,
-            color: 'rgba(255,255,255,0.6)',
+            fontSize: 11,
+            color: 'rgba(255,255,255,0.45)',
             flexShrink: 0,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            transition: 'all 0.2s ease',
+            transition: 'all 0.15s ease',
+            lineHeight: 1,
           }}
           onMouseEnter={(e) => {
-            (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.15)'
-            ;(e.currentTarget as HTMLElement).style.color = '#ffffff'
+            const el = e.currentTarget as HTMLElement
+            el.style.background = 'rgba(255,255,255,0.1)'
+            el.style.color = 'rgba(255,255,255,0.8)'
           }}
           onMouseLeave={(e) => {
-            (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.06)'
-            ;(e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.6)'
+            const el = e.currentTarget as HTMLElement
+            el.style.background = 'rgba(255,255,255,0.05)'
+            el.style.color = 'rgba(255,255,255,0.45)'
           }}
         >
-          {expanded ? '▲' : '▼'}
+          {expanded ? '−' : '+'}
         </button>
       </div>
 
-      {/* Content */}
+      {/* Content body */}
       <div style={{
         padding: '12px 16px',
-        maxHeight: expanded ? 280 : 84,
+        maxHeight: expanded ? 260 : 78,
         overflow: 'hidden',
-        transition: 'max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1)',
+        transition: 'max-height 0.32s cubic-bezier(0.4, 0, 0.2, 1)',
         position: 'relative',
       }}>
         {displayContent ? (
@@ -232,22 +237,21 @@ const CanvasNode = memo(({ data, selected }: NodeProps) => {
             <p style={{
               margin: 0,
               fontSize: 12.5,
-              lineHeight: 1.7,
-              color: 'rgba(255,255,255,0.85)',
+              lineHeight: 1.72,
+              color: 'rgba(255,255,255,0.72)',
               fontWeight: 400,
               whiteSpace: 'pre-wrap',
               wordBreak: 'break-word',
             }}>
               {expanded ? displayContent : previewText}
               {!expanded && hasMore && (
-                <span style={{ color: 'rgba(255,255,255,0.35)', fontWeight: 700 }}>…</span>
+                <span style={{ color: 'rgba(255,255,255,0.25)' }}>…</span>
               )}
             </p>
-            {/* Fade gradient when collapsed */}
             {!expanded && hasMore && (
               <div style={{
-                position: 'absolute', bottom: 0, left: 0, right: 0, height: 32,
-                background: 'linear-gradient(transparent, rgba(10,10,24,0.99))',
+                position: 'absolute', bottom: 0, left: 0, right: 0, height: 28,
+                background: 'linear-gradient(transparent, rgba(11,11,25,0.98))',
                 pointerEvents: 'none',
               }} />
             )}
@@ -256,30 +260,30 @@ const CanvasNode = memo(({ data, selected }: NodeProps) => {
           <p style={{
             margin: 0,
             fontSize: 12,
-            color: 'rgba(255,255,255,0.3)',
+            color: 'rgba(255,255,255,0.22)',
             fontStyle: 'italic',
             lineHeight: 1.5,
           }}>
-            Click to open — use AI Copilot to generate node details
+            No content yet — use AI Copilot to generate details
           </p>
         )}
       </div>
 
-      {/* Action Bar */}
+      {/* Action bar */}
       <div style={{
-        padding: '8px 12px',
-        borderTop: '1px solid rgba(255,255,255,0.07)',
-        background: 'rgba(0,0,0,0.35)',
+        padding: '8px 12px 10px',
+        borderTop: '1px solid rgba(255,255,255,0.05)',
+        background: 'rgba(0,0,0,0.25)',
         display: 'flex',
-        gap: 4,
+        gap: 5,
         alignItems: 'center',
       }}>
         {([
-          { action: 'research',       emoji: '🔬', label: 'Research', color: '#22d3ee' },
-          { action: 'improve',        emoji: '⚡', label: 'Enhance',  color: '#a78bfa' },
-          { action: 'expand',         emoji: '🌿', label: 'Expand',   color: '#6ee7b7' },
-          { action: 'generate-tasks', emoji: '✅', label: 'Tasks',    color: '#fde68a' },
-        ] as const).map(({ action, emoji, label, color }) => (
+          { action: 'research',       label: 'Research', color: '#0891b2' },
+          { action: 'improve',        label: 'Enhance',  color: '#7c3aed' },
+          { action: 'expand',         label: 'Expand',   color: '#059669' },
+          { action: 'generate-tasks', label: 'Tasks',    color: '#d97706' },
+        ] as const).map(({ action, label, color }) => (
           <button
             key={action}
             onMouseDown={(e) => e.stopPropagation()}
@@ -287,68 +291,70 @@ const CanvasNode = memo(({ data, selected }: NodeProps) => {
             title={label}
             style={{
               flex: 1,
-              fontSize: 11,
-              fontWeight: 800,
-              padding: '6px 6px',
-              borderRadius: 8,
-              background: `${color}16`,
-              border: `1px solid ${color}35`,
-              color,
+              fontSize: 10.5,
+              fontWeight: 600,
+              padding: '5px 4px',
+              borderRadius: 6,
+              background: `${color}12`,
+              border: `1px solid ${color}28`,
+              color: `${color}cc`,
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: 3,
-              lineHeight: 1,
+              letterSpacing: '0.01em',
               fontFamily: 'inherit',
-              transition: 'all 0.18s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+              transition: 'all 0.15s ease',
             }}
             onMouseEnter={(e) => {
-              (e.currentTarget as HTMLElement).style.background = `${color}30`
-              ;(e.currentTarget as HTMLElement).style.borderColor = `${color}80`
-              ;(e.currentTarget as HTMLElement).style.transform = 'translateY(-2px) scale(1.05)'
-              ;(e.currentTarget as HTMLElement).style.boxShadow = `0 4px 16px ${color}45`
+              const el = e.currentTarget as HTMLElement
+              el.style.background = `${color}22`
+              el.style.borderColor = `${color}55`
+              el.style.color = color
+              el.style.transform = 'translateY(-1px)'
             }}
             onMouseLeave={(e) => {
-              (e.currentTarget as HTMLElement).style.background = `${color}16`
-              ;(e.currentTarget as HTMLElement).style.borderColor = `${color}35`
-              ;(e.currentTarget as HTMLElement).style.transform = 'translateY(0) scale(1)'
-              ;(e.currentTarget as HTMLElement).style.boxShadow = 'none'
+              const el = e.currentTarget as HTMLElement
+              el.style.background = `${color}12`
+              el.style.borderColor = `${color}28`
+              el.style.color = `${color}cc`
+              el.style.transform = 'translateY(0)'
             }}
           >
-            <span style={{ fontSize: 12 }}>{emoji}</span>
-            <span>{label}</span>
+            {label}
           </button>
         ))}
 
         <button
           onMouseDown={(e) => e.stopPropagation()}
           onClick={(e) => doAction('delete', e)}
-          title="Delete Node"
+          title="Delete"
           style={{
-            width: 28, height: 28,
+            width: 26, height: 26,
             flexShrink: 0,
             fontSize: 12,
-            borderRadius: 8,
-            background: 'rgba(239,68,68,0.1)',
-            border: '1px solid rgba(239,68,68,0.25)',
-            color: '#fca5a5',
+            borderRadius: 6,
+            background: 'rgba(220,38,38,0.08)',
+            border: '1px solid rgba(220,38,38,0.2)',
+            color: 'rgba(248,113,113,0.7)',
             cursor: 'pointer',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            transition: 'all 0.18s ease',
+            transition: 'all 0.15s ease',
           }}
           onMouseEnter={(e) => {
-            (e.currentTarget as HTMLElement).style.background = 'rgba(239,68,68,0.25)'
-            ;(e.currentTarget as HTMLElement).style.borderColor = '#ef4444'
-            ;(e.currentTarget as HTMLElement).style.color = '#ffffff'
+            const el = e.currentTarget as HTMLElement
+            el.style.background = 'rgba(220,38,38,0.2)'
+            el.style.borderColor = 'rgba(220,38,38,0.5)'
+            el.style.color = '#f87171'
           }}
           onMouseLeave={(e) => {
-            (e.currentTarget as HTMLElement).style.background = 'rgba(239,68,68,0.1)'
-            ;(e.currentTarget as HTMLElement).style.borderColor = 'rgba(239,68,68,0.25)'
-            ;(e.currentTarget as HTMLElement).style.color = '#fca5a5'
+            const el = e.currentTarget as HTMLElement
+            el.style.background = 'rgba(220,38,38,0.08)'
+            el.style.borderColor = 'rgba(220,38,38,0.2)'
+            el.style.color = 'rgba(248,113,113,0.7)'
           }}
         >
-          ✕
+          ×
         </button>
       </div>
     </div>

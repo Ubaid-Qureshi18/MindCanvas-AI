@@ -33,26 +33,26 @@ const nodeTypes = { canvasNode: CanvasNode }
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'
 
 const NODE_TYPE_META: Record<string, { icon: string; color: string; label: string }> = {
-  idea:           { icon: '💡', color: '#6366f1', label: 'Idea' },
-  problem:        { icon: '🎯', color: '#ef4444', label: 'Problem' },
-  solution:       { icon: '✨', color: '#10b981', label: 'Solution' },
-  target_users:   { icon: '👥', color: '#f59e0b', label: 'Target Users' },
-  market_research:{ icon: '📈', color: '#06b6d4', label: 'Market Research' },
-  competitor:     { icon: '⚔️', color: '#ec4899', label: 'Competitors' },
-  business_model: { icon: '💼', color: '#8b5cf6', label: 'Business Model' },
-  revenue:        { icon: '💰', color: '#10b981', label: 'Revenue' },
-  tech_stack:     { icon: '🛠', color: '#3b82f6', label: 'Tech Stack' },
-  architecture:   { icon: '🏗', color: '#6366f1', label: 'Architecture' },
-  marketing:      { icon: '📣', color: '#f97316', label: 'Marketing' },
-  budget:         { icon: '💵', color: '#84cc16', label: 'Budget' },
-  roadmap:        { icon: '🗺', color: '#a78bfa', label: 'Roadmap' },
-  risks:          { icon: '⚠️', color: '#ef4444', label: 'Risks' },
-  swot:           { icon: '📊', color: '#22d3ee', label: 'SWOT' },
-  pitch_deck:     { icon: '🎤', color: '#f59e0b', label: 'Pitch Deck' },
-  tasks:          { icon: '✅', color: '#10b981', label: 'Tasks' },
-  research:       { icon: '🔬', color: '#06b6d4', label: 'Research' },
-  insight:        { icon: '💫', color: '#a78bfa', label: 'Insight' },
-  text:           { icon: '📝', color: '#94a3b8', label: 'Text' },
+  idea:           { icon: '◆', color: '#6366f1', label: 'Idea' },
+  problem:        { icon: '◉', color: '#dc2626', label: 'Problem' },
+  solution:       { icon: '◈', color: '#059669', label: 'Solution' },
+  target_users:   { icon: '◎', color: '#d97706', label: 'Target Users' },
+  market_research:{ icon: '▲', color: '#0891b2', label: 'Market Research' },
+  competitor:     { icon: '◇', color: '#7c3aed', label: 'Competitors' },
+  business_model: { icon: '▣', color: '#6366f1', label: 'Business Model' },
+  revenue:        { icon: '◆', color: '#059669', label: 'Revenue' },
+  tech_stack:     { icon: '⬡', color: '#2563eb', label: 'Tech Stack' },
+  architecture:   { icon: '⬢', color: '#4f46e5', label: 'Architecture' },
+  marketing:      { icon: '▸', color: '#d97706', label: 'Marketing' },
+  budget:         { icon: '◈', color: '#0891b2', label: 'Budget' },
+  roadmap:        { icon: '▶', color: '#7c3aed', label: 'Roadmap' },
+  risks:          { icon: '△', color: '#dc2626', label: 'Risks' },
+  swot:           { icon: '◫', color: '#0891b2', label: 'SWOT' },
+  pitch_deck:     { icon: '▷', color: '#d97706', label: 'Pitch Deck' },
+  tasks:          { icon: '□', color: '#059669', label: 'Tasks' },
+  research:       { icon: '◉', color: '#0891b2', label: 'Research' },
+  insight:        { icon: '◎', color: '#7c3aed', label: 'Insight' },
+  text:           { icon: '─', color: '#64748b', label: 'Text' },
 }
 
 function getMeta(type: string) {
@@ -733,7 +733,7 @@ function CanvasWorkspaceContent() {
 
         {/* Center: Search */}
         <div style={{ flex: 1, maxWidth: 300, position: 'relative' }}>
-          <span style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', fontSize: 12, color: 'rgba(255,255,255,0.3)', pointerEvents: 'none' }}>🔍</span>
+          <span style={{ position: 'absolute', left: 11, top: '50%', transform: 'translateY(-50%)', fontSize: 11, color: 'rgba(255,255,255,0.28)', pointerEvents: 'none', fontWeight: 700 }}>⌕</span>
           <input
             type="text"
             placeholder="Search nodes..."
@@ -763,17 +763,16 @@ function CanvasWorkspaceContent() {
 
         {/* Right: actions & features */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
-          {/* AI Swarm Status Badge */}
+          {/* AI status badge */}
           <div style={{
-            display: 'flex', alignItems: 'center', gap: 6,
-            padding: '4px 10px', borderRadius: 20,
-            background: 'linear-gradient(135deg, rgba(56,189,248,0.14), rgba(99,102,241,0.14))',
-            border: '1px solid rgba(56,189,248,0.35)',
-            boxShadow: '0 0 15px rgba(56,189,248,0.2)',
+            display: 'flex', alignItems: 'center', gap: 7,
+            padding: '5px 12px', borderRadius: 8,
+            background: 'rgba(99,102,241,0.09)',
+            border: '1px solid rgba(99,102,241,0.22)',
           }}>
-            <span style={{ fontSize: 8, color: '#38bdf8', animation: 'pulse 2s infinite' }}>🟢</span>
-            <span style={{ fontSize: 11, fontWeight: 800, color: '#7dd3fc', letterSpacing: '0.02em' }}>
-              3 AI Agents Active
+            <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#34d399', display: 'inline-block', flexShrink: 0 }} />
+            <span style={{ fontSize: 11.5, fontWeight: 600, color: 'rgba(167,139,250,0.85)', letterSpacing: '0.01em' }}>
+              AI Active
             </span>
           </div>
 
@@ -786,81 +785,93 @@ function CanvasWorkspaceContent() {
             }}
           />
 
-          {/* Feature 1: AI Copilot */}
+          {/* AI Copilot */}
           <button
             onClick={() => setShowCopilot(true)}
             style={{
-              padding: '7px 14px', borderRadius: 10, cursor: 'pointer',
-              background: 'linear-gradient(135deg, rgba(99,102,241,0.25), rgba(139,92,246,0.25))',
-              border: '1.5px solid rgba(167,139,250,0.5)',
-              color: '#e0e7ff', fontSize: 12.5, fontWeight: 800,
+              padding: '7px 14px', borderRadius: 8, cursor: 'pointer',
+              background: 'rgba(99,102,241,0.12)',
+              border: '1px solid rgba(99,102,241,0.3)',
+              color: '#a5b4fc', fontSize: 12.5, fontWeight: 600,
               display: 'flex', alignItems: 'center', gap: 6,
-              boxShadow: '0 4px 16px rgba(99,102,241,0.25)',
-              transition: 'all 0.2s',
+              transition: 'all 0.18s ease',
+              fontFamily: 'inherit',
             }}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(99,102,241,0.2)'; (e.currentTarget as HTMLElement).style.color = '#c7d2fe' }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(99,102,241,0.12)'; (e.currentTarget as HTMLElement).style.color = '#a5b4fc' }}
           >
-            🧠 AI Copilot
+            AI Copilot
           </button>
 
-          {/* AI Simulator Button */}
+          {/* AI Simulator */}
           <button
             onClick={() => setShowSimulator(true)}
             style={{
-              padding: '7px 14px', borderRadius: 10, cursor: 'pointer',
-              background: 'linear-gradient(135deg, rgba(16,185,129,0.25), rgba(6,182,212,0.25))',
-              border: '1.5px solid rgba(52,211,153,0.5)',
-              color: '#a7f3d0', fontSize: 12.5, fontWeight: 800,
+              padding: '7px 14px', borderRadius: 8, cursor: 'pointer',
+              background: 'rgba(5,150,105,0.1)',
+              border: '1px solid rgba(5,150,105,0.3)',
+              color: '#6ee7b7', fontSize: 12.5, fontWeight: 600,
               display: 'flex', alignItems: 'center', gap: 6,
-              boxShadow: '0 4px 16px rgba(16,185,129,0.25)',
-              transition: 'all 0.2s',
+              transition: 'all 0.18s ease',
+              fontFamily: 'inherit',
             }}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(5,150,105,0.18)'; (e.currentTarget as HTMLElement).style.color = '#a7f3d0' }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(5,150,105,0.1)'; (e.currentTarget as HTMLElement).style.color = '#6ee7b7' }}
           >
-            🔮 AI Simulator
+            Simulator
           </button>
 
-          {/* Feature 2: Pitch Deck Mode */}
+          {/* Pitch Deck */}
           <button
             onClick={() => setShowPresentation(true)}
             style={{
-              padding: '7px 14px', borderRadius: 10, cursor: 'pointer',
-              background: 'linear-gradient(135deg, rgba(245,158,11,0.2), rgba(236,72,153,0.2))',
-              border: '1.5px solid rgba(251,191,36,0.45)',
-              color: '#fef3c7', fontSize: 12.5, fontWeight: 800,
+              padding: '7px 14px', borderRadius: 8, cursor: 'pointer',
+              background: 'rgba(217,119,6,0.1)',
+              border: '1px solid rgba(217,119,6,0.28)',
+              color: '#fbbf24', fontSize: 12.5, fontWeight: 600,
               display: 'flex', alignItems: 'center', gap: 6,
-              boxShadow: '0 4px 16px rgba(245,158,11,0.2)',
-              transition: 'all 0.2s',
+              transition: 'all 0.18s ease',
+              fontFamily: 'inherit',
             }}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(217,119,6,0.18)'; (e.currentTarget as HTMLElement).style.color = '#fde68a' }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(217,119,6,0.1)'; (e.currentTarget as HTMLElement).style.color = '#fbbf24' }}
           >
-            📺 Pitch Deck
+            Pitch Deck
           </button>
 
           {/* Add Node */}
           <button
             onClick={() => setShowAddNodeModal(true)}
             style={{
-              padding: '7px 16px', borderRadius: 10, border: 'none', cursor: 'pointer',
-              background: 'linear-gradient(135deg, #6366f1, #8b5cf6, #ec4899)',
-              color: 'white', fontSize: 12.5, fontWeight: 900,
+              padding: '7px 16px', borderRadius: 8, border: 'none', cursor: 'pointer',
+              background: 'linear-gradient(135deg, #6366f1, #7c3aed)',
+              color: 'white', fontSize: 12.5, fontWeight: 700,
               display: 'flex', alignItems: 'center', gap: 6,
-              boxShadow: '0 4px 20px rgba(99,102,241,0.4)',
-              transition: 'all 0.2s',
+              boxShadow: '0 4px 16px rgba(99,102,241,0.35)',
+              transition: 'all 0.18s ease',
+              fontFamily: 'inherit',
             }}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.boxShadow = '0 6px 22px rgba(99,102,241,0.5)'; (e.currentTarget as HTMLElement).style.transform = 'translateY(-1px)' }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.boxShadow = '0 4px 16px rgba(99,102,241,0.35)'; (e.currentTarget as HTMLElement).style.transform = '' }}
           >
-            <span style={{ fontSize: 15, lineHeight: 1 }}>+</span> Add Node
+            + Add node
           </button>
 
-          {/* Feature 4: Multi-Format Export */}
+          {/* Export */}
           <button
             onClick={() => setShowExportModal(true)}
             style={{
-              padding: '7px 14px', borderRadius: 10, cursor: 'pointer',
-              background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.15)',
-              color: 'rgba(255,255,255,0.9)', fontSize: 12.5, fontWeight: 700,
+              padding: '7px 13px', borderRadius: 8, cursor: 'pointer',
+              background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.11)',
+              color: 'rgba(255,255,255,0.65)', fontSize: 12.5, fontWeight: 600,
               display: 'flex', alignItems: 'center', gap: 6,
-              transition: 'all 0.2s',
+              transition: 'all 0.18s ease',
+              fontFamily: 'inherit',
             }}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.09)'; (e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.85)' }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.05)'; (e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.65)' }}
           >
-            📥 Export
+            Export
           </button>
 
           <div style={{
@@ -881,14 +892,14 @@ function CanvasWorkspaceContent() {
         </div>
       </header>
 
-      {/* ── Error banner ── */}
+      {/* Error banner */}
       {error && (
         <div style={{
-          padding: '10px 18px', background: 'rgba(239,68,68,0.1)', borderBottom: '1px solid rgba(239,68,68,0.2)',
-          fontSize: 13, color: '#fca5a5', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          padding: '9px 18px', background: 'rgba(220,38,38,0.08)', borderBottom: '1px solid rgba(220,38,38,0.18)',
+          fontSize: 12.5, color: '#f87171', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12,
         }}>
-          <span>⚠️ {error}</span>
-          <button onClick={() => setError(null)} style={{ background: 'none', border: 'none', color: '#fca5a5', cursor: 'pointer', fontSize: 16 }}>×</button>
+          <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}><span style={{ fontSize: 14, fontWeight: 700 }}>!</span> {error}</span>
+          <button onClick={() => setError(null)} style={{ background: 'none', border: 'none', color: 'rgba(248,113,113,0.7)', cursor: 'pointer', fontSize: 18, lineHeight: 1, padding: '0 4px' }}>×</button>
         </div>
       )}
 
