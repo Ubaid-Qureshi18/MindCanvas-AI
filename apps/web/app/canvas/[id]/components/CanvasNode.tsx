@@ -27,11 +27,23 @@ function cleanMarkdown(raw: string): string {
     .trim()
 }
 
+function stripLeadingEmoji(title: string): string {
+  return title.replace(/^[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F600}-\u{1F64F}\u{1F680}-\u{1F6FF}\s]+/gu, '').trim() || title
+}
+
+const ACTIONS = [
+  { id: 'research',       label: 'Research', icon: '◎', accent: '#0891b2' },
+  { id: 'improve',        label: 'Enhance',  icon: '◈', accent: '#7c3aed' },
+  { id: 'expand',         label: 'Expand',   icon: '◇', accent: '#059669' },
+  { id: 'generate-tasks', label: 'Tasks',    icon: '□', accent: '#d97706' },
+] as const
+
 const CanvasNode = memo(({ data, selected }: NodeProps) => {
   const nodeData = data as unknown as NodeData
   const { title, content, meta, onAction, hasResearch } = nodeData
   const [expanded, setExpanded] = useState(false)
   const [hovered, setHovered] = useState(false)
+  const [actionHover, setActionHover] = useState<string | null>(null)
 
   const rawContent = typeof content === 'string'
     ? content
@@ -40,8 +52,9 @@ const CanvasNode = memo(({ data, selected }: NodeProps) => {
     : ''
 
   const displayContent = cleanMarkdown(rawContent)
-  const previewText = displayContent.slice(0, 180)
-  const hasMore = displayContent.length > 180
+  const previewText = displayContent.slice(0, 200)
+  const hasMore = displayContent.length > 200
+  const cleanTitle = stripLeadingEmoji(title)
 
   const doAction = (action: string, e: React.MouseEvent) => {
     e.stopPropagation()
@@ -49,56 +62,47 @@ const CanvasNode = memo(({ data, selected }: NodeProps) => {
     if (onAction) onAction(action, nodeData.id)
   }
 
-  const isActive = selected || hovered
   const c = meta.color
-
-  const bgBase = selected
-    ? 'rgba(16, 16, 34, 0.98)'
-    : hovered
-    ? 'rgba(14, 14, 30, 0.97)'
-    : 'rgba(11, 11, 25, 0.95)'
-
-  const borderColor = selected
-    ? `${c}bb`
-    : hovered
-    ? `${c}66`
-    : 'rgba(255,255,255,0.09)'
-
-  const shadow = selected
-    ? `0 0 0 2.5px ${c}28, 0 20px 52px rgba(0,0,0,0.8), 0 0 32px ${c}22`
-    : hovered
-    ? `0 16px 44px rgba(0,0,0,0.7), 0 0 18px ${c}14`
-    : '0 8px 28px rgba(0,0,0,0.55)'
+  const isActive = selected || hovered
 
   return (
     <div
       onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      onMouseLeave={() => { setHovered(false); setActionHover(null) }}
       style={{
-        width: 360,
-        borderRadius: 14,
-        background: bgBase,
-        border: `1px solid ${borderColor}`,
-        boxShadow: shadow,
-        transform: selected
-          ? 'scale(1.025) translateY(-3px)'
+        width: 340,
+        borderRadius: 16,
+        background: selected
+          ? 'rgba(15,15,32,0.99)'
           : hovered
-          ? 'scale(1.01) translateY(-2px)'
+          ? 'rgba(13,13,28,0.98)'
+          : 'rgba(10,10,22,0.96)',
+        border: `1px solid ${selected ? `${c}99` : hovered ? `${c}44` : 'rgba(255,255,255,0.08)'}`,
+        boxShadow: selected
+          ? `0 0 0 2px ${c}30, 0 24px 60px rgba(0,0,0,0.85), 0 0 40px ${c}18`
+          : hovered
+          ? `0 20px 50px rgba(0,0,0,0.75), 0 0 24px ${c}10`
+          : '0 6px 24px rgba(0,0,0,0.5)',
+        transform: selected
+          ? 'scale(1.022) translateY(-4px)'
+          : hovered
+          ? 'scale(1.008) translateY(-2px)'
           : 'scale(1)',
-        transition: 'all 0.22s cubic-bezier(0.4, 0, 0.2, 1)',
+        transition: 'all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)',
         position: 'relative',
         overflow: 'hidden',
         fontFamily: "'Inter', system-ui, sans-serif",
-        backdropFilter: 'blur(28px) saturate(180%)',
+        backdropFilter: 'blur(32px) saturate(200%)',
         userSelect: 'none',
+        cursor: 'grab',
       }}
     >
-      {/* Handles */}
+      {/* ── Connection handles ── */}
       {[
-        { type: 'target' as const, pos: Position.Left,   style: { left: -5 } },
-        { type: 'source' as const, pos: Position.Right,  style: { right: -5 } },
-        { type: 'target' as const, pos: Position.Top,    style: { top: -5 } },
-        { type: 'source' as const, pos: Position.Bottom, style: { bottom: -5 } },
+        { type: 'target' as const, pos: Position.Left,   style: { left: -6 } },
+        { type: 'source' as const, pos: Position.Right,  style: { right: -6 } },
+        { type: 'target' as const, pos: Position.Top,    style: { top: -6 } },
+        { type: 'source' as const, pos: Position.Bottom, style: { bottom: -6 } },
       ].map(({ type, pos, style }, i) => (
         <Handle
           key={i}
@@ -106,253 +110,254 @@ const CanvasNode = memo(({ data, selected }: NodeProps) => {
           position={pos}
           style={{
             background: c,
-            width: 9, height: 9,
+            width: 10, height: 10,
             border: `2px solid #07070f`,
             borderRadius: '50%',
             opacity: isActive ? 1 : 0,
             transition: 'opacity 0.18s, transform 0.18s',
-            transform: isActive ? 'scale(1.2)' : 'scale(1)',
+            transform: isActive ? 'scale(1.3)' : 'scale(1)',
+            boxShadow: isActive ? `0 0 8px ${c}` : 'none',
             ...style,
           }}
         />
       ))}
 
-      {/* Accent top bar */}
+      {/* ── Top accent stripe with gradient ── */}
       <div style={{
-        height: 3,
-        background: `linear-gradient(90deg, ${c} 0%, ${c}50 60%, transparent 100%)`,
-        opacity: isActive ? 1 : 0.7,
+        height: 2.5,
+        background: `linear-gradient(90deg, ${c} 0%, ${c}80 50%, transparent 100%)`,
+        opacity: isActive ? 1 : 0.6,
         transition: 'opacity 0.2s',
       }} />
 
-      {/* Header */}
+      {/* ── Left accent bar ── */}
       <div style={{
-        padding: '14px 16px 12px',
-        borderBottom: '1px solid rgba(255,255,255,0.06)',
-        display: 'flex',
-        alignItems: 'center',
-        gap: 11,
+        position: 'absolute',
+        left: 0, top: 2.5, bottom: 0,
+        width: 2.5,
+        background: `linear-gradient(180deg, ${c} 0%, ${c}40 60%, transparent 100%)`,
+        opacity: isActive ? 0.9 : 0.45,
+        transition: 'opacity 0.2s',
+        borderRadius: '0 0 0 16px',
+      }} />
+
+      {/* ── Glow orb behind icon ── */}
+      <div style={{
+        position: 'absolute',
+        top: -20, left: 8,
+        width: 80, height: 80,
+        borderRadius: '50%',
+        background: `radial-gradient(circle, ${c}15 0%, transparent 70%)`,
+        pointerEvents: 'none',
+        opacity: isActive ? 1 : 0.5,
+        transition: 'opacity 0.3s',
+      }} />
+
+      {/* ── Header ── */}
+      <div style={{
+        padding: '14px 14px 12px 18px',
+        display: 'flex', alignItems: 'flex-start', gap: 12,
+        position: 'relative',
       }}>
-        {/* Node icon */}
+        {/* Icon badge */}
         <div style={{
-          width: 38, height: 38,
-          borderRadius: 11,
+          width: 36, height: 36, flexShrink: 0,
+          borderRadius: 10,
           background: `${c}18`,
-          border: `1px solid ${c}35`,
+          border: `1px solid ${c}40`,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          fontSize: 16, color: c, fontWeight: 800, flexShrink: 0,
+          fontSize: 15, color: c, fontWeight: 800,
+          boxShadow: `0 0 12px ${c}20, inset 0 1px 0 ${c}25`,
+          transition: 'all 0.2s',
+          ...(isActive ? { boxShadow: `0 0 18px ${c}35, inset 0 1px 0 ${c}30`, background: `${c}22` } : {}),
         }}>
           {meta.icon}
         </div>
 
-        {/* Label + title */}
+        {/* Label + title block */}
         <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
+          {/* Category badge row */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: 5 }}>
             <span style={{
-              fontSize: 9, fontWeight: 700,
+              fontSize: 8.5, fontWeight: 800,
               color: c,
               textTransform: 'uppercase',
               letterSpacing: '0.1em',
-              background: `${c}18`,
-              padding: '2px 8px',
+              background: `${c}15`,
+              padding: '2px 7px',
               borderRadius: 4,
-              border: `1px solid ${c}30`,
+              border: `1px solid ${c}28`,
               whiteSpace: 'nowrap',
             }}>
               {meta.label}
             </span>
             {hasResearch && (
               <span style={{
-                fontSize: 9, padding: '2px 7px',
+                fontSize: 8.5, padding: '2px 6px',
                 borderRadius: 4,
-                background: 'rgba(8,145,178,0.14)',
+                background: 'rgba(8,145,178,0.12)',
                 color: '#22d3ee',
-                border: '1px solid rgba(8,145,178,0.3)',
-                fontWeight: 700,
-                letterSpacing: '0.05em',
+                border: '1px solid rgba(8,145,178,0.28)',
+                fontWeight: 800, letterSpacing: '0.05em',
                 textTransform: 'uppercase',
               }}>
-                Research
+                Researched
               </span>
             )}
           </div>
 
+          {/* Title */}
           <div style={{
-            fontSize: 14,
-            fontWeight: 700,
-            color: 'rgba(255,255,255,0.92)',
-            lineHeight: 1.3,
-            letterSpacing: '-0.02em',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
+            fontSize: 13.5, fontWeight: 700,
+            color: 'rgba(255,255,255,0.95)',
+            lineHeight: 1.3, letterSpacing: '-0.018em',
+            overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+            paddingRight: 4,
           }}>
-            {title.replace(/^[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F600}-\u{1F64F}\u{1F680}-\u{1F6FF}\s]+/gu, '').trim() || title}
+            {cleanTitle}
           </div>
         </div>
 
-        {/* Expand toggle */}
+        {/* Expand/collapse button */}
         <button
-          onMouseDown={(e) => e.stopPropagation()}
-          onClick={(e) => { e.stopPropagation(); setExpanded(!expanded) }}
+          onMouseDown={e => e.stopPropagation()}
+          onClick={e => { e.stopPropagation(); setExpanded(!expanded) }}
+          title={expanded ? 'Collapse' : 'Expand'}
           style={{
-            width: 24, height: 24,
-            background: 'rgba(255,255,255,0.05)',
-            border: '1px solid rgba(255,255,255,0.1)',
-            borderRadius: 6,
-            cursor: 'pointer',
-            fontSize: 12,
-            fontWeight: 700,
-            color: 'rgba(255,255,255,0.5)',
-            flexShrink: 0,
+            width: 22, height: 22, flexShrink: 0,
+            background: expanded ? `${c}20` : 'rgba(255,255,255,0.05)',
+            border: `1px solid ${expanded ? `${c}40` : 'rgba(255,255,255,0.09)'}`,
+            borderRadius: 6, cursor: 'pointer',
+            color: expanded ? c : 'rgba(255,255,255,0.45)',
+            fontSize: 11, fontWeight: 900,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             transition: 'all 0.15s ease',
-            lineHeight: 1,
           }}
-          onMouseEnter={(e) => {
+          onMouseEnter={e => {
             const el = e.currentTarget as HTMLElement
-            el.style.background = 'rgba(255,255,255,0.1)'
-            el.style.color = 'rgba(255,255,255,0.85)'
+            el.style.background = `${c}28`
+            el.style.borderColor = `${c}55`
+            el.style.color = c
           }}
-          onMouseLeave={(e) => {
+          onMouseLeave={e => {
             const el = e.currentTarget as HTMLElement
-            el.style.background = 'rgba(255,255,255,0.05)'
-            el.style.color = 'rgba(255,255,255,0.5)'
+            el.style.background = expanded ? `${c}20` : 'rgba(255,255,255,0.05)'
+            el.style.borderColor = expanded ? `${c}40` : 'rgba(255,255,255,0.09)'
+            el.style.color = expanded ? c : 'rgba(255,255,255,0.45)'
           }}
         >
           {expanded ? '−' : '+'}
         </button>
       </div>
 
-      {/* Content body */}
+      {/* ── Divider ── */}
       <div style={{
-        padding: '12px 16px',
-        maxHeight: expanded ? 320 : 92,
+        height: 1,
+        background: `linear-gradient(90deg, ${c}20 0%, rgba(255,255,255,0.06) 40%, transparent 100%)`,
+        marginLeft: 18,
+      }} />
+
+      {/* ── Content body ── */}
+      <div style={{
+        padding: '11px 16px 11px 18px',
+        maxHeight: expanded ? 300 : 88,
         overflow: 'hidden',
-        transition: 'max-height 0.32s cubic-bezier(0.4, 0, 0.2, 1)',
+        transition: 'max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1)',
         position: 'relative',
       }}>
         {displayContent ? (
           <>
             <p style={{
               margin: 0,
-              fontSize: 13,
-              lineHeight: 1.65,
-              color: 'rgba(255,255,255,0.82)',
+              fontSize: 12.5,
+              lineHeight: 1.68,
+              color: 'rgba(255,255,255,0.72)',
               fontWeight: 400,
               whiteSpace: 'pre-wrap',
               wordBreak: 'break-word',
             }}>
               {expanded ? displayContent : previewText}
               {!expanded && hasMore && (
-                <span style={{ color: 'rgba(255,255,255,0.3)' }}>…</span>
+                <span style={{ color: 'rgba(255,255,255,0.25)' }}>…</span>
               )}
             </p>
             {!expanded && hasMore && (
               <div style={{
-                position: 'absolute', bottom: 0, left: 0, right: 0, height: 28,
-                background: 'linear-gradient(transparent, rgba(11,11,25,0.98))',
+                position: 'absolute', bottom: 0, left: 0, right: 0, height: 32,
+                background: `linear-gradient(transparent, rgba(10,10,22,0.97))`,
                 pointerEvents: 'none',
               }} />
             )}
           </>
         ) : (
           <p style={{
-            margin: 0,
-            fontSize: 12.5,
-            color: 'rgba(255,255,255,0.25)',
-            fontStyle: 'italic',
-            lineHeight: 1.5,
+            margin: 0, fontSize: 12,
+            color: 'rgba(255,255,255,0.22)',
+            fontStyle: 'italic', lineHeight: 1.5,
           }}>
-            No content yet — use AI Copilot to generate details
+            No content yet — click Enhance to generate with AI
           </p>
         )}
       </div>
 
-      {/* Action bar */}
+      {/* ── Action bar ── */}
       <div style={{
-        padding: '8px 12px 10px',
-        borderTop: '1px solid rgba(255,255,255,0.05)',
-        background: 'rgba(0,0,0,0.25)',
-        display: 'flex',
-        gap: 6,
-        alignItems: 'center',
+        padding: '8px 14px 10px 18px',
+        borderTop: '1px solid rgba(255,255,255,0.045)',
+        background: 'rgba(0,0,0,0.3)',
+        display: 'flex', gap: 5, alignItems: 'center',
       }}>
-        {([
-          { action: 'research',       label: 'Research', color: '#0891b2' },
-          { action: 'improve',        label: 'Enhance',  color: '#7c3aed' },
-          { action: 'expand',         label: 'Expand',   color: '#059669' },
-          { action: 'generate-tasks', label: 'Tasks',    color: '#d97706' },
-        ] as const).map(({ action, label, color }) => (
-          <button
-            key={action}
-            onMouseDown={(e) => e.stopPropagation()}
-            onClick={(e) => doAction(action, e)}
-            title={label}
-            style={{
-              flex: 1,
-              fontSize: 11,
-              fontWeight: 600,
-              padding: '6px 5px',
-              borderRadius: 6,
-              background: `${color}14`,
-              border: `1px solid ${color}28`,
-              color: `${color}dd`,
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              letterSpacing: '0.01em',
-              fontFamily: 'inherit',
-              transition: 'all 0.15s ease',
-            }}
-            onMouseEnter={(e) => {
-              const el = e.currentTarget as HTMLElement
-              el.style.background = `${color}25`
-              el.style.borderColor = `${color}55`
-              el.style.color = color
-              el.style.transform = 'translateY(-1px)'
-            }}
-            onMouseLeave={(e) => {
-              const el = e.currentTarget as HTMLElement
-              el.style.background = `${color}14`
-              el.style.borderColor = `${color}28`
-              el.style.color = `${color}dd`
-              el.style.transform = 'translateY(0)'
-            }}
-          >
-            {label}
-          </button>
-        ))}
+        {ACTIONS.map(({ id, label, icon, accent }) => {
+          const isHov = actionHover === id
+          return (
+            <button
+              key={id}
+              onMouseDown={e => e.stopPropagation()}
+              onClick={e => doAction(id, e)}
+              onMouseEnter={() => setActionHover(id)}
+              onMouseLeave={() => setActionHover(null)}
+              title={label}
+              style={{
+                flex: 1,
+                fontSize: 10.5,
+                fontWeight: 700,
+                padding: '5px 4px',
+                borderRadius: 7,
+                background: isHov ? `${accent}28` : `${accent}10`,
+                border: `1px solid ${isHov ? `${accent}55` : `${accent}22`}`,
+                color: isHov ? accent : `${accent}bb`,
+                cursor: 'pointer',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                gap: 3,
+                letterSpacing: '0.01em',
+                fontFamily: 'inherit',
+                transition: 'all 0.13s ease',
+                transform: isHov ? 'translateY(-1px)' : 'none',
+              }}
+            >
+              <span style={{ fontSize: 9, fontWeight: 900 }}>{icon}</span>
+              {label}
+            </button>
+          )
+        })}
 
+        {/* Delete */}
         <button
-          onMouseDown={(e) => e.stopPropagation()}
-          onClick={(e) => doAction('delete', e)}
-          title="Delete"
+          onMouseDown={e => e.stopPropagation()}
+          onClick={e => doAction('delete', e)}
+          title="Delete node"
           style={{
-            width: 26, height: 26,
-            flexShrink: 0,
-            fontSize: 13,
-            borderRadius: 6,
-            background: 'rgba(220,38,38,0.08)',
-            border: '1px solid rgba(220,38,38,0.2)',
-            color: 'rgba(248,113,113,0.7)',
+            width: 26, height: 26, flexShrink: 0,
+            fontSize: 12, borderRadius: 7,
+            background: actionHover === 'delete' ? 'rgba(220,38,38,0.22)' : 'rgba(220,38,38,0.07)',
+            border: `1px solid ${actionHover === 'delete' ? 'rgba(220,38,38,0.55)' : 'rgba(220,38,38,0.18)'}`,
+            color: actionHover === 'delete' ? '#f87171' : 'rgba(248,113,113,0.5)',
             cursor: 'pointer',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            transition: 'all 0.15s ease',
+            transition: 'all 0.13s ease',
           }}
-          onMouseEnter={(e) => {
-            const el = e.currentTarget as HTMLElement
-            el.style.background = 'rgba(220,38,38,0.2)'
-            el.style.borderColor = 'rgba(220,38,38,0.5)'
-            el.style.color = '#f87171'
-          }}
-          onMouseLeave={(e) => {
-            const el = e.currentTarget as HTMLElement
-            el.style.background = 'rgba(220,38,38,0.08)'
-            el.style.borderColor = 'rgba(220,38,38,0.2)'
-            el.style.color = 'rgba(248,113,113,0.7)'
-          }}
+          onMouseEnter={() => setActionHover('delete')}
+          onMouseLeave={() => setActionHover(null)}
         >
           ×
         </button>

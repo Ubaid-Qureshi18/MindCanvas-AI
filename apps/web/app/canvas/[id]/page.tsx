@@ -953,22 +953,23 @@ function CanvasWorkspaceContent() {
           style={{ background: '#06060e' }}
           defaultEdgeOptions={{
             type: 'smoothstep',
-            style: { stroke: 'rgba(99,102,241,0.55)', strokeWidth: 2 },
-            animated: false,
+            style: { stroke: 'rgba(99,102,241,0.5)', strokeWidth: 1.8, filter: 'drop-shadow(0 0 4px rgba(99,102,241,0.4))' },
+            animated: true,
           }}
           proOptions={{ hideAttribution: true }}
           deleteKeyCode="Delete"
         >
           <Background
-            variant={BackgroundVariant.Lines}
-            color="rgba(255,255,255,0.03)"
-            gap={40}
+            variant={BackgroundVariant.Dots}
+            color="rgba(255,255,255,0.06)"
+            gap={32}
+            size={1.2}
             style={{ opacity: 1 }}
           />
           <MiniMap
-            style={{ background: '#0c0c1e', borderRadius: 12, border: '1px solid rgba(255,255,255,0.1)' }}
+            style={{ background: '#08081a', borderRadius: 10, border: '1px solid rgba(255,255,255,0.09)', boxShadow: '0 4px 20px rgba(0,0,0,0.5)' }}
             nodeColor={(n: any) => getMeta(n.data?.type).color}
-            maskColor="rgba(6,6,14,0.8)"
+            maskColor="rgba(4,4,14,0.85)"
           />
           <Controls
             style={{
